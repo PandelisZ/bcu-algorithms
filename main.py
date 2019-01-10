@@ -63,7 +63,10 @@ def trainModel(modelName, X_train, y_train):
         from sklearn.naive_bayes import GaussianNB
         model = GaussianNB()
         return model.fit(X_train, y_train)
-    if(modelName == "Standard Deviation")
+    if(modelName == "Nearest Neighbor"):
+        from sklearn.neighbors import KNeighborsClassifier
+        model = KNeighborsClassifier(n_neighbors=3)
+        return model.fit(X_train, y_train)
 
 def timeFunction(modelName):
     import time
@@ -77,15 +80,20 @@ def timeFunction(modelName):
 def ofsted():
     import pandas as pd
 
-    X = pd.read_csv('data/x.csv')
-    X = X.drop("Unnamed: 0",axis=1)
-    y = pd.read_csv('data/y.csv')
-    y = y.drop("Unnamed: 0",axis=1)
-    foldData("Decision Tree", X, y)
-    #foldData("Neural Network", X, y)
-    #foldData("LDA", X, y)
-    #foldData("Support Vector Machine", X, y)
-    #foldData("NB", X, y)
+    # Read in traning data
+    data_x = pd.read_csv('data/x.csv')
+    data_y = pd.read_csv('data/y.csv')
+
+    # Remove unwanted columns
+    data_x_clean = data_x.drop("Unnamed: 0", axis=1)
+    data_y_clean = data_y.drop("Unnamed: 0", axis=1)
+
+    # foldData("Decision Tree", data_x_clean, data_y_clean)
+    #foldData("Neural Network", data_x_clean, data_y_clean)
+    #foldData("LDA", data_x_clean, data_y_clean)
+    #foldData("Support Vector Machine",data_x_clean, data_y_clean)
+    #foldData("NB", data_x_clean, data_y_clean)
+    foldData("Nearest Neighbor", data_x_clean, data_y_clean)
 
 
 

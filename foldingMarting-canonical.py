@@ -4,7 +4,7 @@ Created on Tue Nov 27 15:57:10 2018
 
 @author: s15106137
 """
-VERBOSE = False
+VERBOSE = True
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -13,7 +13,7 @@ def printScore(score_array, label,modelName):
     avg = np.mean(score_array)
     std = np.std(score_array)
     print("{:s}. {:s}. Mean: {:f} - Standard Deviation: {:f}".format(modelName,label,avg,std))
-
+ 
 #Evaluates model and gives f1-score. Generic to all algorithms
 def scoreModel(model, X_test, y_test):
     from sklearn.metrics import f1_score
@@ -24,7 +24,7 @@ def scoreModel(model, X_test, y_test):
     if(VERBOSE):
         print(classification_report(y_test,y_pred))
     return [f1_score(y_test, y_pred,average='weighted'), precision_score(y_test, y_pred,average='weighted'), recall_score(y_test, y_pred,average='weighted')]
-
+   
 def foldData(modelName, X,y):
     from sklearn.model_selection import StratifiedKFold
     kfold = StratifiedKFold(10, True, 1)
@@ -40,56 +40,40 @@ def foldData(modelName, X,y):
     printScore(f1_score_array, "F1 Score",modelName)
     printScore(precision_score_array, "Precision Score",modelName)
     printScore(recall_score_array, "Recall Score",modelName)
-
+    
 #Method for training a specific model. Returns the model MODIFY FOR EACH ALGORITHM
 def trainModel(modelName, X_train, y_train):
-    if(modelName == "Decision Tree"):
-        from sklearn.tree import DecisionTreeClassifier
-        model = DecisionTreeClassifier(criterion='entropy', max_depth=10, random_state=0)
-        return model.fit(X_train, y_train)
-    if(modelName == "Neural Network"):
-        from sklearn.neural_network import MLPClassifier
-        mlp = MLPClassifier(hidden_layer_sizes=(24,24,24))
-        return mlp.fit(X_train,y_train)
-    if(modelName == "LDA"):
-        from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-        model = LinearDiscriminantAnalysis(n_components=2)
-        return model.fit(X_train, y_train)
     if(modelName == "Support Vector Machine"):
         from sklearn import svm
-        clf = svm.SVC(C=0.5, kernel='rbf', decision_function_shape='ovr')
-        return clf.fit(X_train, y_train)
+        # Now 10/1/2019 75000 is running -> MUST re-run 18000
+        C = 200 # C6=1e-10 C5=3000 C4=750 C3=250 C2=100 C1=0.5
+        # (gamma1=3, C=200) gamma2=6 gamma3=30
+        clf = svm.SVC(C=C, kernel='rbf', decision_function_shape='ovr', gamma=75)
+        return clf.fit(X_train, y_train) 
     if(modelName == "NB"):
         from sklearn.naive_bayes import GaussianNB
         model = GaussianNB()
         return model.fit(X_train, y_train)
-    if(modelName == "Standard Deviation")
-
+    
 def timeFunction(modelName):
     import time
     time1 = time.time()
     ofsted()
     time2 = time.time()
     runtime = (time2 - time1) / 60
-    print(modelName, "algorithm " "took" , runtime, "minutes")
+    print(modelName, "algorithm took" , runtime, "minutes")
 
 #Main method tying together the whole flow and defines file/column names
 def ofsted():
-    import pandas as pd
-
-    X = pd.read_csv('data/x.csv')
+    import pandas as pd  
+    X = pd.read_csv('X.csv')
     X = X.drop("Unnamed: 0",axis=1)
-    y = pd.read_csv('data/y.csv')
-    y = y.drop("Unnamed: 0",axis=1)
-    foldData("Decision Tree", X, y)
-    #foldData("Neural Network", X, y)
-    #foldData("LDA", X, y)
-    #foldData("Support Vector Machine", X, y)
-    #foldData("NB", X, y)
-
-
-
+    y = pd.read_csv('y.csv')
+    y = y.drop("Unnamed: 0",axis=1) 
+    foldData("Support Vector Machine", X, y)
+    
+    
 #Use preprocessing.py first to create processedData.csv
 #ofsted()
-timeFunction("NB")
+timeFunction("SVM")
 
