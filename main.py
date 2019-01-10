@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 27 15:57:10 2018
-
-@author: s15106137
-"""
-VERBOSE = False
+VERBOSE = True
 import warnings
 import time
 import pandas as pd
@@ -36,7 +31,7 @@ def model_timer(func):
         runtime = (time2 - time1)
         m, s = divmod(runtime, 60)
         h, m = divmod(m, 60)
-        print("    Algorithm took: %d:%02d:%02d (H:MM:SS)" % (h, m, s))
+        print("    Execution time: %d:%02d:%02d (H:MM:SS)" % (h, m, s))
     return model_timer_wraper
 
 
@@ -97,11 +92,11 @@ def main():
     data_x_clean = data_x.drop("Unnamed: 0", axis=1)
     data_y_clean = data_y.drop("Unnamed: 0", axis=1)
 
-    foldData("Decision Tree", data_x_clean, data_y_clean)
-    foldData("Neural Network", data_x_clean, data_y_clean)
-    foldData("LDA", data_x_clean, data_y_clean)
-    foldData("Support Vector Machine",data_x_clean, data_y_clean)
-    foldData("NB", data_x_clean, data_y_clean)
+    # foldData("Decision Tree", data_x_clean, data_y_clean)
+    # foldData("Neural Network", data_x_clean, data_y_clean)
+    # foldData("LDA", data_x_clean, data_y_clean)
+    # foldData("Support Vector Machine",data_x_clean, data_y_clean)
+    # foldData("NB", data_x_clean, data_y_clean)
     foldData("Nearest Neighbor", data_x_clean, data_y_clean)
 
 
