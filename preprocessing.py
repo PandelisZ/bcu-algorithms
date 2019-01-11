@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Oct 23 15:34:58 2018
-
-@author: s15106137
-"""
+import pandas as pd
 
 VERBOSE = True
 
-
-import pandas as pd
 grouped = pd.read_csv('csv/england_cfrgrouped.csv')
 ofsted = pd.read_csv('csv/england_ofsted-schools.csv')
 joined = ofsted.set_index('URN').join(grouped.set_index('URN'),how="inner")
@@ -18,7 +12,7 @@ print(joined.columns)
 def normaliseColumn(data, columnName):
     colMin = data[columnName].min()
     colMax = data[columnName].max()
-    
+
     def norm(item):
         return (item - colMin)/ (colMax - colMin)
     data[columnName] = data[columnName].apply(norm)
@@ -29,7 +23,7 @@ def normaliseAllColumns(data):
     for column in data:
         if (column not in exluded):
             data = normaliseColumn(data, column)
-    return data     
+    return data
 def removeComma(x):
     if (type(x) is str):
         try:
@@ -48,7 +42,7 @@ def removeValue(dataframe, value):
         if (x == value):
             return 0
         return x
-    
+
     for column in dataframe.columns:
         dataframe[column] = dataframe[column].apply(remove)
     return dataframe
@@ -59,7 +53,7 @@ def convertColumnToFloat(dataframe, columnname):
     le.fit(dataframe[columnname].astype(str))
     dataframe[columnname] = le.transform(dataframe[columnname].astype(str))
     return dataframe
-    
+
 joined = joined.drop("Unnamed: 33",axis=1)
 joined = joined.drop("School name (as shown on Performance tables)",axis=1)
 joined = joined.drop("Old school name (if different)",axis=1)
@@ -112,5 +106,5 @@ smoteX, smotey = smoteIt(X, y)
 Xframe = pd.DataFrame(smoteX)
 print(Xframe)
 yframe = pd.DataFrame(smotey)
-Xframe.to_csv('X.csv')
+Xframe.to_csv('x.csv')
 yframe.to_csv('y.csv')
