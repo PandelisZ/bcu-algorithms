@@ -60,13 +60,13 @@ class Algorithm:
         ]
 
     @timer
-    def execute(self):
+    def train(self, algorithm):
         kfold = StratifiedKFold(10, True, 1)
         f1_score = []
         precision_score = []
         recall_score = []
         for train, test in kfold.split(self.data_training, self.data_target):
-            model = self.train(self.data_training.iloc[train], self.data_target.iloc[train])
+            model = algorithm.fit(self.data_training.iloc[train], self.data_target.iloc[train])
             scores = self.score_model(model, self.data_training.iloc[test], self.data_target.iloc[test])
             f1_score.append(scores[0])
             precision_score.append(scores[1])
@@ -74,5 +74,3 @@ class Algorithm:
 
         self.print_results(f1_score, precision_score, recall_score)
 
-    def train(self, training_x, training_y):
-        pass
