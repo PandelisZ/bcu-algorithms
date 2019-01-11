@@ -43,4 +43,4 @@ class NearestNeighbor(Algorithm):
 
 
     def execute(self):
-        self.train(KNeighborsClassifier(n_neighbors=2, weights="distance", algorithm="ball_tree", leaf_size=25, p=2, metric="minkowski"))
+        self.train(KNeighborsClassifier(n_neighbors=2, weights="distance", algorithm="ball_tree", leaf_size=25, p=1, metric="minkowski"))
