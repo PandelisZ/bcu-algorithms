@@ -43,12 +43,4 @@ class NearestNeighbor(Algorithm):
 
 
     def execute(self):
-        # Default
-        print("Default settings")
-        self.train(classifier_wrapper(n_neighbors=5, weights="uniform", algorithm="auto", leaf_size=30, p=2, metric="minkowski"))
-
-        for n_neighbors in range(1, 11):
-            for leaf_size in range(1, 51):
-                for p in range(1,4):
-                    self.train(classifier_wrapper(n_neighbors=n_neighbors, weights="uniform", algorithm="auto", leaf_size=leaf_size, p=p, metric="minkowski"))
-
+        self.train(KNeighborsClassifier(n_neighbors=2, weights="distance", algorithm="ball_tree", leaf_size=25, p=2, metric="minkowski"))

@@ -14,9 +14,12 @@ def main():
     data_training_clean = data_training.drop("Unnamed: 0", axis=1)
     data_target_clean = data_target.drop("Unnamed: 0", axis=1)
 
+    # Instantiate algorithms
     nearest_neighbor = NearestNeighbor(data_training_clean, data_target_clean)
 
-    nearest_neighbor.weights_algorithm_run()
+
+    # Execute
+    nearest_neighbor.execute()
 
 
 #Use preprocessing.py first to create processedData.csv
