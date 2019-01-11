@@ -36,18 +36,41 @@ class Algorithm:
         self.VERBOSE = verbose
 
     def print_results(self, f1_score, precision_score, recall_score):
+        """Print the algorithms score for various facets
+
+        Arguments:
+            f1_score {array} -- F1 Score
+            precision_score {array} -- Precision Score
+            recall_score {array} -- Recall Score
+        """
         print("Algorithm: %s" % self.name)
         self.print_score(f1_score, "F1 Score")
         self.print_score(precision_score, "Precision Score")
         self.print_score(recall_score, "Recall Score")
 
     def print_score(self, score_array, label):
+        """Helper function for pretty printing the scores
+
+        Arguments:
+            score_array {array} -- Array of ints
+            label {[type]} -- Score label
+        """
         avg = np.mean(score_array)
         std = np.std(score_array)
         print("    {:s} - Mean: {:f} - Standard Deviation: {:f}".format(label, avg, std))
 
-    #Evaluates model and gives f1-score. Generic to all algorithms
     def score_model(self, model, test_training, test_target):
+        """Evaluates model and gives f1-score. Generic to all algorithms
+
+        Arguments:
+            model {object} -- Algorithm model
+            test_training {object} -- X training data
+            test_target {object} -- y expected data
+
+        Returns:
+            [array] -- The scoring of the algorithms accuracy
+        """
+
         target_prediction = model.predict(test_training)
         from sklearn.metrics import classification_report
         if(self.VERBOSE):
@@ -61,6 +84,13 @@ class Algorithm:
 
     @timer
     def train(self, algorithm):
+        """Main training function. This is the entry for a training process in this class
+
+        Arguments:
+            algorithm {object} -- This is the instanciated algorithm object to call .fit()
+                                  onto in order to get the model
+        """
+
         kfold = StratifiedKFold(10, True, 1)
         f1_score = []
         precision_score = []
