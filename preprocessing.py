@@ -3,8 +3,8 @@ import pandas as pd
 
 VERBOSE = True
 
-grouped = pd.read_csv('csv/england_cfrgrouped.csv')
-ofsted = pd.read_csv('csv/england_ofsted-schools.csv')
+grouped = pd.read_csv('data/england_cfrgrouped.csv')
+ofsted = pd.read_csv('data/england_ofsted-schools.csv')
 joined = ofsted.set_index('URN').join(grouped.set_index('URN'),how="inner")
 joined.to_csv('joined.csv')
 print(joined.columns)

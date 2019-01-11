@@ -1,8 +1,31 @@
+import datetime
+import time
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import f1_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
+
+def timer(func):
+    """Time the execution time of a function
+
+    Arguments:
+        func {function} -- The function to wrap
+
+    Returns:
+        None
+    """
+    def timer_wraper(*args, **kwargs):
+        start = time.time()
+        func(*args, **kwargs)
+        end = time.time()
+        runtime = (end - start)
+        #Minutes, seconds, hours, minutes
+        m, s = divmod(runtime, 60)
+        h, m = divmod(m, 60)
+        print("    Execution time: %d:%02d:%02d (H:MM:SS)" % (h, m, s))
+    return timer_wraper
+
 
 class Algorithm:
 
@@ -31,18 +54,25 @@ class Algorithm:
             print(classification_report(test_target, target_prediction))
 
         return [
-            f1_score(test_training, target_prediction, average='weighted'),
+            f1_score(test_target, target_prediction, average='weighted'),
             precision_score(test_target, target_prediction, average='weighted'),
-            recall_score(test_training, target_prediction, average='weighted')
+            recall_score(test_target, target_prediction, average='weighted')
         ]
 
+    @timer
     def execute(self):
         kfold = StratifiedKFold(10, True, 1)
+        f1_score = []
+        precision_score = []
+        recall_score = []
         for train, test in kfold.split(self.data_training, self.data_target):
             model = self.train(self.data_training.iloc[train], self.data_target.iloc[train])
-            f1_score, precision_score, recall_score = self.score_model(model, self.data_training.iloc[test], self.data_target.iloc[test])
+            scores = self.score_model(model, self.data_training.iloc[test], self.data_target.iloc[test])
+            f1_score.append(scores[0])
+            precision_score.append(scores[1])
+            recall_score.append(scores[2])
 
         self.print_results(f1_score, precision_score, recall_score)
 
-    # def train(self, training_x, training_y):
-    #     pass
+    def train(self, training_x, training_y):
+        pass
