@@ -16,7 +16,7 @@ def main():
 
     nearest_neighbor = NearestNeighbor(data_training_clean, data_target_clean)
 
-    nearest_neighbor.execute()
+    nearest_neighbor.weights_algorithm_run()
 
 
 #Use preprocessing.py first to create processedData.csv
